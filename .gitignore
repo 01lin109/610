@@ -1,0 +1,65 @@
+# ============================
+# Java / Maven (Backend)
+# ============================
+market_backend/target/
+*.class
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+market_backend/logs/
+
+# ============================
+# Vue / Vite / Node (Frontend)
+# ============================
+market_frontend/node_modules/
+market_frontend/dist/
+market_frontend/.vite/
+
+# ============================
+# IDE / Editor
+# ============================
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
+.project
+.classpath
+*.swp
+*.swo
+*~
+
+# ============================
+# OS
+# ============================
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ============================
+# Logs
+# ============================
+logs/
+*.log
+
+# ============================
+# Docker
+# ============================
+.docker/
+
+# ============================
+# Environment / Config
+# ============================
+.env
+.env.local
+.env.*.local
+
+# ============================
+# Claude
+# ============================
+.claude/settings.local.json

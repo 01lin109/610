@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.market.mapper.SysDeptMapper">
+    <resultMap id="BaseResultMap" type="com.market.entity.SysDept">
+        <id column="id" property="id"/><result column="parent_id" property="parentId"/><result column="dept_name" property="deptName"/><result column="order_num" property="orderNum"/><result column="leader" property="leader"/><result column="phone" property="phone"/><result column="email" property="email"/><result column="status" property="status"/><result column="create_time" property="createTime"/><result column="update_time" property="updateTime"/><result column="deleted" property="deleted"/>
+    </resultMap>
+    <sql id="Base_Column_List">id, parent_id, dept_name, order_num, leader, phone, email, status, create_time, update_time, deleted</sql>
+    <select id="selectById" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM sys_dept WHERE id = #{id} AND deleted = 0</select>
+    <select id="selectByParentId" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM sys_dept WHERE parent_id = #{parentId} AND deleted = 0 ORDER BY order_num ASC</select>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM sys_dept WHERE deleted = 0
+        <if test="keyword != null and keyword != ''">AND dept_name LIKE CONCAT('%',#{keyword},'%')</if>
+        <if test="status != null">AND status = #{status}</if> ORDER BY order_num ASC
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM sys_dept WHERE deleted = 0 ORDER BY order_num ASC</select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_dept (parent_id, dept_name, order_num, leader, phone, email, status, create_time, update_time, deleted)
+        VALUES (#{parentId}, #{deptName}, #{orderNum}, #{leader}, #{phone}, #{email}, #{status}, #{createTime}, #{updateTime}, #{deleted})
+    </insert>
+    <update id="update">UPDATE sys_dept SET parent_id=#{parentId}, dept_name=#{deptName}, order_num=#{orderNum}, leader=#{leader}, phone=#{phone}, email=#{email}, status=#{status}, update_time=#{updateTime} WHERE id=#{id}</update>
+    <update id="deleteById">UPDATE sys_dept SET deleted = 1 WHERE id = #{id}</update>
+    <update id="deleteBatch">UPDATE sys_dept SET deleted = 1 WHERE id IN <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach></update>
+</mapper>

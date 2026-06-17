@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.market.mapper.PromotionMapper">
+    <resultMap id="BaseResultMap" type="com.market.entity.Promotion">
+        <id column="id" property="id"/>
+        <result column="promotion_name" property="promotionName"/>
+        <result column="promotion_type" property="promotionType"/>
+        <result column="rule" property="rule"/>
+        <result column="discount_value" property="discountValue"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="status" property="status"/>
+        <result column="product_ids" property="productIds"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">id, promotion_name, promotion_type, rule, discount_value, start_time, end_time, status, product_ids, remark, create_time, update_time</sql>
+    <select id="selectById" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM promotion WHERE id = #{id}</select>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM promotion WHERE 1=1
+        <if test="keyword != null and keyword != ''">AND promotion_name LIKE CONCAT('%',#{keyword},'%')</if>
+        <if test="status != null">AND status = #{status}</if>
+        ORDER BY create_time DESC
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM promotion ORDER BY create_time DESC</select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO promotion (promotion_name, promotion_type, rule, discount_value, start_time, end_time, status, product_ids, remark, create_time, update_time)
+        VALUES (#{promotionName}, #{promotionType}, #{rule}, #{discountValue}, #{startTime}, #{endTime}, #{status}, #{productIds}, #{remark}, #{createTime}, #{updateTime})
+    </insert>
+    <update id="update">
+        UPDATE promotion SET promotion_name=#{promotionName}, promotion_type=#{promotionType}, rule=#{rule}, discount_value=#{discountValue}, start_time=#{startTime}, end_time=#{endTime}, status=#{status}, product_ids=#{productIds}, remark=#{remark}, update_time=#{updateTime} WHERE id=#{id}
+    </update>
+    <delete id="deleteById">DELETE FROM promotion WHERE id = #{id}</delete>
+    <delete id="deleteBatch">DELETE FROM promotion WHERE id IN <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach></delete>
+    <update id="updateStatus">UPDATE promotion SET status = #{status} WHERE id = #{id}</update>
+    <select id="selectActive" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM promotion WHERE status = 1 AND NOW() BETWEEN start_time AND end_time ORDER BY create_time DESC
+    </select>
+</mapper>

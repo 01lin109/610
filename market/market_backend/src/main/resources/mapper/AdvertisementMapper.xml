@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.market.mapper.AdvertisementMapper">
+    <resultMap id="BaseResultMap" type="com.market.entity.Advertisement">
+        <id column="id" property="id"/><result column="ad_name" property="adName"/><result column="ad_type" property="adType"/><result column="ad_position" property="adPosition"/><result column="image_url" property="imageUrl"/><result column="link_url" property="linkUrl"/><result column="sort" property="sort"/><result column="status" property="status"/><result column="click_count" property="clickCount"/><result column="start_time" property="startTime"/><result column="end_time" property="endTime"/><result column="remark" property="remark"/><result column="create_time" property="createTime"/><result column="update_time" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">id, ad_name, ad_type, ad_position, image_url, link_url, sort, status, click_count, start_time, end_time, remark, create_time, update_time</sql>
+    <select id="selectById" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM advertisement WHERE id = #{id}</select>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM advertisement WHERE 1=1
+        <if test="keyword != null and keyword != ''">AND ad_name LIKE CONCAT('%',#{keyword},'%')</if>
+        <if test="status != null">AND status = #{status}</if> ORDER BY sort ASC
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM advertisement ORDER BY sort ASC</select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO advertisement (ad_name, ad_type, ad_position, image_url, link_url, sort, status, click_count, start_time, end_time, remark, create_time, update_time)
+        VALUES (#{adName}, #{adType}, #{adPosition}, #{imageUrl}, #{linkUrl}, #{sort}, #{status}, #{clickCount}, #{startTime}, #{endTime}, #{remark}, #{createTime}, #{updateTime})
+    </insert>
+    <update id="update">UPDATE advertisement SET ad_name=#{adName}, ad_type=#{adType}, ad_position=#{adPosition}, image_url=#{imageUrl}, link_url=#{linkUrl}, sort=#{sort}, status=#{status}, start_time=#{startTime}, end_time=#{endTime}, remark=#{remark}, update_time=#{updateTime} WHERE id=#{id}</update>
+    <delete id="deleteById">DELETE FROM advertisement WHERE id = #{id}</delete>
+    <delete id="deleteBatch">DELETE FROM advertisement WHERE id IN <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach></delete>
+    <update id="updateStatus">UPDATE advertisement SET status = #{status} WHERE id = #{id}</update>
+    <update id="addClickCount">UPDATE advertisement SET click_count = click_count + 1 WHERE id = #{id}</update>
+    <select id="selectByPosition" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM advertisement WHERE ad_position = #{position} AND status = 1 AND NOW() BETWEEN start_time AND end_time ORDER BY sort ASC</select>
+</mapper>

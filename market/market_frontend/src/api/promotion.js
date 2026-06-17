@@ -1,0 +1,11 @@
+import request from './request'
+export const getPromotionList = params => request.get('/promotion/promotions', { params })
+export const getPromotion = id => request.get(`/promotion/promotions/${id}`)
+export const addPromotion = data => request.post('/promotion/promotions', data)
+export const updatePromotion = data => request.put('/promotion/promotions', data)
+export const deletePromotion = id => request.delete(`/promotion/promotions/${id}`)
+export const getCouponList = params => request.get('/promotion/coupons', { params })
+export const getCoupon = id => request.get(`/promotion/coupons/${id}`)
+export const addCoupon = data => request.post('/promotion/coupons', data)
+export const updateCoupon = data => request.put('/promotion/coupons', data)
+export const deleteCoupon = id => request.delete(`/promotion/coupons/${id}`)

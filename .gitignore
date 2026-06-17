@@ -1,7 +1,7 @@
 # ============================
 # Java / Maven (Backend)
 # ============================
-market_backend/target/
+market/market_backend/target/
 *.class
 *.jar
 *.war
@@ -15,9 +15,9 @@ market_backend/logs/
 # ============================
 # Vue / Vite / Node (Frontend)
 # ============================
-market_frontend/node_modules/
-market_frontend/dist/
-market_frontend/.vite/
+market/market_frontend/node_modules/
+market/market_frontend/dist/
+market/market_frontend/.vite/
 
 # ============================
 # IDE / Editor

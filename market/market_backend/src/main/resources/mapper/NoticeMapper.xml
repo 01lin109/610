@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.market.mapper.NoticeMapper">
+    <resultMap id="BaseResultMap" type="com.market.entity.Notice">
+        <id column="id" property="id"/><result column="title" property="title"/><result column="content" property="content"/><result column="notice_type" property="noticeType"/><result column="status" property="status"/><result column="is_top" property="isTop"/><result column="publisher_id" property="publisherId"/><result column="publisher_name" property="publisherName"/><result column="publish_time" property="publishTime"/><result column="create_time" property="createTime"/><result column="update_time" property="updateTime"/><result column="deleted" property="deleted"/>
+    </resultMap>
+    <sql id="Base_Column_List">id, title, content, notice_type, status, is_top, publisher_id, publisher_name, publish_time, create_time, update_time, deleted</sql>
+    <select id="selectById" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM notice WHERE id = #{id} AND deleted = 0</select>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM notice WHERE deleted = 0
+        <if test="keyword != null and keyword != ''">AND title LIKE CONCAT('%',#{keyword},'%')</if>
+        <if test="noticeType != null">AND notice_type = #{noticeType}</if>
+        <if test="status != null">AND status = #{status}</if> ORDER BY is_top DESC, create_time DESC
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM notice WHERE deleted = 0 ORDER BY create_time DESC</select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO notice (title, content, notice_type, status, is_top, publisher_id, publisher_name, publish_time, create_time, update_time, deleted)
+        VALUES (#{title}, #{content}, #{noticeType}, #{status}, #{isTop}, #{publisherId}, #{publisherName}, #{publishTime}, #{createTime}, #{updateTime}, #{deleted})
+    </insert>
+    <update id="update">UPDATE notice SET title=#{title}, content=#{content}, notice_type=#{noticeType}, status=#{status}, is_top=#{isTop}, publish_time=#{publishTime}, update_time=#{updateTime} WHERE id=#{id}</update>
+    <update id="deleteById">UPDATE notice SET deleted = 1 WHERE id = #{id}</update>
+    <update id="deleteBatch">UPDATE notice SET deleted = 1 WHERE id IN <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach></update>
+    <update id="updateStatus">UPDATE notice SET status = #{status} WHERE id = #{id}</update>
+    <update id="updateTop">UPDATE notice SET is_top = #{isTop} WHERE id = #{id}</update>
+    <select id="selectTop" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM notice WHERE deleted = 0 AND status = 1 AND is_top = 1 ORDER BY create_time DESC LIMIT #{limit}</select>
+</mapper>

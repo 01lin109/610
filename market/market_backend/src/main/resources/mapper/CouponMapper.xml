@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.market.mapper.CouponMapper">
+    <resultMap id="BaseResultMap" type="com.market.entity.Coupon">
+        <id column="id" property="id"/>
+        <result column="coupon_name" property="couponName"/>
+        <result column="coupon_type" property="couponType"/>
+        <result column="discount_value" property="discountValue"/>
+        <result column="min_amount" property="minAmount"/>
+        <result column="total_count" property="totalCount"/>
+        <result column="received_count" property="receivedCount"/>
+        <result column="used_count" property="usedCount"/>
+        <result column="per_limit" property="perLimit"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="valid_days" property="validDays"/>
+        <result column="status" property="status"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">id, coupon_name, coupon_type, discount_value, min_amount, total_count, received_count, used_count, per_limit, start_time, end_time, valid_days, status, remark, create_time, update_time</sql>
+    <select id="selectById" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM coupon WHERE id = #{id}</select>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM coupon WHERE 1=1
+        <if test="keyword != null and keyword != ''">AND coupon_name LIKE CONCAT('%',#{keyword},'%')</if>
+        <if test="status != null">AND status = #{status}</if>
+        ORDER BY create_time DESC
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM coupon ORDER BY create_time DESC</select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO coupon (coupon_name, coupon_type, discount_value, min_amount, total_count, received_count, used_count, per_limit, start_time, end_time, valid_days, status, remark, create_time, update_time)
+        VALUES (#{couponName}, #{couponType}, #{discountValue}, #{minAmount}, #{totalCount}, #{receivedCount}, #{usedCount}, #{perLimit}, #{startTime}, #{endTime}, #{validDays}, #{status}, #{remark}, #{createTime}, #{updateTime})
+    </insert>
+    <update id="update">
+        UPDATE coupon SET coupon_name=#{couponName}, coupon_type=#{couponType}, discount_value=#{discountValue}, min_amount=#{minAmount}, total_count=#{totalCount}, per_limit=#{perLimit}, start_time=#{startTime}, end_time=#{endTime}, valid_days=#{validDays}, status=#{status}, remark=#{remark}, update_time=#{updateTime} WHERE id=#{id}
+    </update>
+    <delete id="deleteById">DELETE FROM coupon WHERE id = #{id}</delete>
+    <delete id="deleteBatch">DELETE FROM coupon WHERE id IN <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach></delete>
+    <update id="updateStatus">UPDATE coupon SET status = #{status} WHERE id = #{id}</update>
+    <update id="addReceivedCount">UPDATE coupon SET received_count = received_count + 1 WHERE id = #{id}</update>
+    <update id="addUsedCount">UPDATE coupon SET used_count = used_count + 1 WHERE id = #{id}</update>
+    <select id="selectAvailable" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM coupon WHERE status = 1 AND NOW() BETWEEN start_time AND end_time AND received_count &lt; total_count ORDER BY create_time DESC
+    </select>
+</mapper>

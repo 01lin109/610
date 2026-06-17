@@ -1,0 +1,207 @@
+/* ============================================
+   Taobao-Inspired Theme — Market Admin
+   Element Plus CSS Variable Overrides
+   ============================================ */
+
+:root {
+  /* ---- Brand Colors ---- */
+  /* Taobao Orange — Primary */
+  --el-color-primary: #FF5500;
+  --el-color-primary-light-3: #FF8C4A;
+  --el-color-primary-light-5: #FFB080;
+  --el-color-primary-light-7: #FFD4B3;
+  --el-color-primary-light-8: #FFE4CC;
+  --el-color-primary-light-9: #FFF0E6;
+  --el-color-primary-dark-2: #D94600;
+
+  /* Success — Fresh Green */
+  --el-color-success: #2DAF7A;
+  --el-color-success-light-3: #6CCCA0;
+  --el-color-success-light-5: #9DDFBF;
+  --el-color-success-light-7: #C5EDD9;
+  --el-color-success-light-8: #DBF4E7;
+  --el-color-success-light-9: #EDFAF3;
+  --el-color-success-dark-2: #1F8C5E;
+
+  /* Warning — Amber/Gold */
+  --el-color-warning: #F5A623;
+  --el-color-warning-light-3: #F8C05E;
+  --el-color-warning-light-5: #FAD489;
+  --el-color-warning-light-7: #FCE5B2;
+  --el-color-warning-light-8: #FDF0CD;
+  --el-color-warning-light-9: #FEF7E6;
+  --el-color-warning-dark-2: #CF8A18;
+
+  /* Danger / Error — Taobao Red */
+  --el-color-danger: #E2231A;
+  --el-color-danger-light-3: #EB5E57;
+  --el-color-danger-light-5: #F18A85;
+  --el-color-danger-light-7: #F6B3AF;
+  --el-color-danger-light-8: #F9CDCA;
+  --el-color-danger-light-9: #FDE6E5;
+  --el-color-danger-dark-2: #C41E16;
+
+  --el-color-error: #E2231A;
+  --el-color-error-light-3: #EB5E57;
+  --el-color-error-light-5: #F18A85;
+  --el-color-error-light-7: #F6B3AF;
+  --el-color-error-light-8: #F9CDCA;
+  --el-color-error-light-9: #FDE6E5;
+  --el-color-error-dark-2: #C41E16;
+
+  /* Info — Warm Blue-Gray */
+  --el-color-info: #7E8C9E;
+  --el-color-info-light-3: #A3B0BF;
+  --el-color-info-light-5: #BCC6D2;
+  --el-color-info-light-7: #D3DAE2;
+  --el-color-info-light-8: #E2E7ED;
+  --el-color-info-light-9: #EFF2F5;
+  --el-color-info-dark-2: #657183;
+
+  /* ---- Background & Surface ---- */
+  --el-bg-color: #FFFFFF;
+  --el-bg-color-page: #F4F5F7;
+  --el-bg-color-overlay: #FFFFFF;
+
+  /* ---- Text Colors (Warm Dark) ---- */
+  --el-text-color-primary: #1A1A2E;
+  --el-text-color-regular: #4A4A5A;
+  --el-text-color-secondary: #8E8E9E;
+  --el-text-color-placeholder: #B0B0C0;
+  --el-text-color-disabled: #C8C8D4;
+
+  /* ---- Border Colors (Warm Gray) ---- */
+  --el-border-color: #DDDDE3;
+  --el-border-color-light: #E8E8EE;
+  --el-border-color-lighter: #F0F0F5;
+  --el-border-color-extra-light: #F5F5FA;
+  --el-border-color-dark: #C8C8D4;
+  --el-border-color-darker: #B0B0BC;
+
+  /* ---- Border Radius ---- */
+  --el-border-radius-base: 6px;
+  --el-border-radius-small: 4px;
+  --el-border-radius-round: 20px;
+  --el-border-radius-circle: 100%;
+
+  /* ---- Fill Colors ---- */
+  --el-fill-color: #F4F5F7;
+  --el-fill-color-light: #F8F9FA;
+  --el-fill-color-lighter: #FCFCFD;
+  --el-fill-color-extra-light: #FEFEFE;
+  --el-fill-color-dark: #E8E9ED;
+  --el-fill-color-darker: #DDDEE4;
+  --el-fill-color-blank: #FFFFFF;
+
+  /* ---- Font ---- */
+  --el-font-size-extra-large: 20px;
+  --el-font-size-large: 18px;
+  --el-font-size-medium: 16px;
+  --el-font-size-base: 14px;
+  --el-font-size-small: 13px;
+  --el-font-size-extra-small: 12px;
+  --el-font-weight-primary: 500;
+
+  /* ---- Shadows ---- */
+  --el-box-shadow: 0px 2px 8px rgba(26, 26, 46, 0.06), 0px 1px 2px rgba(26, 26, 46, 0.04);
+  --el-box-shadow-light: 0px 1px 4px rgba(26, 26, 46, 0.08);
+  --el-box-shadow-lighter: 0px 1px 2px rgba(26, 26, 46, 0.04);
+  --el-box-shadow-dark: 0px 4px 16px rgba(26, 26, 46, 0.12), 0px 2px 8px rgba(26, 26, 46, 0.08);
+
+  /* ---- Transitions ---- */
+  --el-transition-duration: 0.2s;
+  --el-transition-duration-fast: 0.15s;
+  --el-transition-function-ease-in-out-bezier: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---- Global Element Plus Component Tweaks ---- */
+
+/* Table — warm hover and header */
+.el-table {
+  --el-table-header-bg-color: var(--el-fill-color);
+  --el-table-row-hover-bg-color: rgba(255, 85, 0, 0.04);
+  --el-table-border-color: var(--el-border-color-lighter);
+  --el-table-text-color: var(--el-text-color-regular);
+  border-radius: var(--el-border-radius-base);
+  overflow: hidden;
+}
+
+/* Card — subtle warmth */
+.el-card {
+  --el-card-border-color: var(--el-border-color-light);
+  --el-card-bg-color: var(--el-bg-color);
+  border-radius: var(--el-border-radius-base);
+  box-shadow: var(--el-box-shadow-light);
+}
+
+/* Tag — refined padding */
+.el-tag {
+  --el-tag-border-radius: var(--el-border-radius-small);
+}
+
+/* Button — smoother corners */
+.el-button {
+  --el-border-radius-base: var(--el-border-radius-base);
+}
+
+/* Input — focus ring color */
+.el-input {
+  --el-input-focus-border-color: var(--el-color-primary);
+  --el-input-border-color: var(--el-border-color);
+  --el-input-hover-border-color: var(--el-color-primary-light-3);
+}
+
+/* Select */
+.el-select {
+  --el-select-input-focus-border-color: var(--el-color-primary);
+}
+
+/* Date Picker */
+.el-date-editor {
+  --el-date-editor-fill-color: var(--el-bg-color);
+}
+
+/* Pagination */
+.el-pagination {
+  --el-pagination-button-color: var(--el-text-color-regular);
+  --el-pagination-hover-color: var(--el-color-primary);
+}
+
+/* Dialog / Modal */
+.el-dialog {
+  --el-dialog-border-radius: 8px;
+  --el-dialog-header-bg-color: var(--el-bg-color);
+}
+
+/* Dropdown */
+.el-dropdown-menu {
+  --el-dropdown-menuItem-hover-fill: var(--el-color-primary-light-9);
+  --el-dropdown-menuItem-hover-color: var(--el-color-primary);
+}
+
+/* Message / Notification */
+.el-message {
+  --el-message-border-radius: var(--el-border-radius-base);
+}
+
+/* NProgress customization */
+#nprogress .bar {
+  background: var(--el-color-primary) !important;
+}
+#nprogress .peg {
+  box-shadow: 0 0 10px var(--el-color-primary), 0 0 5px var(--el-color-primary) !important;
+}
+#nprogress .spinner-icon {
+  border-top-color: var(--el-color-primary) !important;
+  border-left-color: var(--el-color-primary) !important;
+}
+
+/* ---- Utility Animations ---- */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity var(--el-transition-duration) var(--el-transition-function-ease-in-out-bezier);
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}

@@ -1,0 +1,11 @@
+import request from './request'
+export const getArticleList = params => request.get('/content/articles', { params })
+export const getArticle = id => request.get(`/content/articles/${id}`)
+export const addArticle = data => request.post('/content/articles', data)
+export const updateArticle = data => request.put('/content/articles', data)
+export const deleteArticle = id => request.delete(`/content/articles/${id}`)
+export const getNoticeList = params => request.get('/content/notices', { params })
+export const getNotice = id => request.get(`/content/notices/${id}`)
+export const addNotice = data => request.post('/content/notices', data)
+export const updateNotice = data => request.put('/content/notices', data)
+export const deleteNotice = id => request.delete(`/content/notices/${id}`)

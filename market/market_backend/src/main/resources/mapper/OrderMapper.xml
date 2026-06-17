@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.market.mapper.OrderMapper">
+    <resultMap id="BaseResultMap" type="com.market.entity.Order">
+        <id column="id" property="id"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="member_id" property="memberId"/>
+        <result column="member_name" property="memberName"/>
+        <result column="total_amount" property="totalAmount"/>
+        <result column="freight" property="freight"/>
+        <result column="discount_amount" property="discountAmount"/>
+        <result column="pay_amount" property="payAmount"/>
+        <result column="status" property="status"/>
+        <result column="pay_type" property="payType"/>
+        <result column="pay_time" property="payTime"/>
+        <result column="delivery_no" property="deliveryNo"/>
+        <result column="delivery_company" property="deliveryCompany"/>
+        <result column="delivery_time" property="deliveryTime"/>
+        <result column="receiver_name" property="receiverName"/>
+        <result column="receiver_phone" property="receiverPhone"/>
+        <result column="receiver_address" property="receiverAddress"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+    <sql id="Base_Column_List">id, order_no, member_id, member_name, total_amount, freight, discount_amount, pay_amount, status, pay_type, pay_time, delivery_no, delivery_company, delivery_time, receiver_name, receiver_phone, receiver_address, remark, create_time, update_time, deleted</sql>
+    <select id="selectById" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM `order` WHERE id = #{id} AND deleted = 0</select>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM `order` WHERE deleted = 0
+        <if test="orderNo != null and orderNo != ''">AND order_no LIKE CONCAT('%',#{orderNo},'%')</if>
+        <if test="status != null">AND status = #{status}</if>
+        <if test="startTime != null and startTime != ''">AND create_time &gt;= #{startTime}</if>
+        <if test="endTime != null and endTime != ''">AND create_time &lt;= #{endTime}</if>
+        ORDER BY create_time DESC
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM `order` WHERE deleted = 0 ORDER BY create_time DESC</select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `order` (order_no, member_id, member_name, total_amount, freight, discount_amount, pay_amount, status, pay_type, pay_time, delivery_no, delivery_company, delivery_time, receiver_name, receiver_phone, receiver_address, remark, create_time, update_time, deleted)
+        VALUES (#{orderNo}, #{memberId}, #{memberName}, #{totalAmount}, #{freight}, #{discountAmount}, #{payAmount}, #{status}, #{payType}, #{payTime}, #{deliveryNo}, #{deliveryCompany}, #{deliveryTime}, #{receiverName}, #{receiverPhone}, #{receiverAddress}, #{remark}, #{createTime}, #{updateTime}, #{deleted})
+    </insert>
+    <update id="update">
+        UPDATE `order` SET order_no=#{orderNo}, member_id=#{memberId}, member_name=#{memberName}, total_amount=#{totalAmount}, freight=#{freight}, discount_amount=#{discountAmount}, pay_amount=#{payAmount}, status=#{status}, pay_type=#{payType}, pay_time=#{payTime}, delivery_no=#{deliveryNo}, delivery_company=#{deliveryCompany}, delivery_time=#{deliveryTime}, receiver_name=#{receiverName}, receiver_phone=#{receiverPhone}, receiver_address=#{receiverAddress}, remark=#{remark}, update_time=#{updateTime} WHERE id = #{id}
+    </update>
+    <update id="deleteById">UPDATE `order` SET deleted = 1 WHERE id = #{id}</update>
+    <update id="deleteBatch">UPDATE `order` SET deleted = 1 WHERE id IN <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach></update>
+    <update id="updateStatus">UPDATE `order` SET status = #{status} WHERE id = #{id}</update>
+    <update id="updateDelivery">UPDATE `order` SET delivery_no=#{deliveryNo}, delivery_company=#{deliveryCompany}, delivery_time=#{deliveryTime}, status=#{status} WHERE id=#{id}</update>
+    <select id="countByStatus" resultType="int">SELECT COUNT(*) FROM `order` WHERE status = #{status} AND deleted = 0</select>
+    <select id="selectByMemberId" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM `order` WHERE member_id = #{memberId} AND deleted = 0 ORDER BY create_time DESC</select>
+</mapper>

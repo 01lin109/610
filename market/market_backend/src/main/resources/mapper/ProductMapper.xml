@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.market.mapper.ProductMapper">
+    <resultMap id="BaseResultMap" type="com.market.entity.Product">
+        <id column="id" property="id"/>
+        <result column="product_name" property="productName"/>
+        <result column="product_code" property="productCode"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="category_name" property="categoryName"/>
+        <result column="brand" property="brand"/>
+        <result column="price" property="price"/>
+        <result column="cost_price" property="costPrice"/>
+        <result column="stock" property="stock"/>
+        <result column="sales" property="sales"/>
+        <result column="unit" property="unit"/>
+        <result column="main_image" property="mainImage"/>
+        <result column="images" property="images"/>
+        <result column="description" property="description"/>
+        <result column="specs" property="specs"/>
+        <result column="sort" property="sort"/>
+        <result column="status" property="status"/>
+        <result column="is_new" property="isNew"/>
+        <result column="is_hot" property="isHot"/>
+        <result column="is_recommend" property="isRecommend"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, product_name, product_code, category_id, category_name, brand,
+        price, cost_price, stock, sales, unit, main_image, images, description, specs,
+        sort, status, is_new, is_hot, is_recommend, create_time, update_time, deleted
+    </sql>
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM product WHERE id = #{id} AND deleted = 0
+    </select>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM product WHERE deleted = 0
+        <if test="keyword != null and keyword != ''">
+            AND (product_name LIKE CONCAT('%',#{keyword},'%') OR product_code LIKE CONCAT('%',#{keyword},'%'))
+        </if>
+        <if test="categoryId != null">
+            AND category_id = #{categoryId}
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        ORDER BY sort ASC, create_time DESC
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM product WHERE deleted = 0 ORDER BY sort ASC
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO product (product_name, product_code, category_id, category_name, brand,
+        price, cost_price, stock, sales, unit, main_image, images, description, specs,
+        sort, status, is_new, is_hot, is_recommend, create_time, update_time, deleted)
+        VALUES (#{productName}, #{productCode}, #{categoryId}, #{categoryName}, #{brand},
+        #{price}, #{costPrice}, #{stock}, #{sales}, #{unit}, #{mainImage}, #{images}, #{description}, #{specs},
+        #{sort}, #{status}, #{isNew}, #{isHot}, #{isRecommend}, #{createTime}, #{updateTime}, #{deleted})
+    </insert>
+    <update id="update">
+        UPDATE product SET product_name=#{productName}, product_code=#{productCode}, category_id=#{categoryId}, category_name=#{categoryName},
+        brand=#{brand}, price=#{price}, cost_price=#{costPrice}, stock=#{stock}, unit=#{unit},
+        main_image=#{mainImage}, images=#{images}, description=#{description}, specs=#{specs},
+        sort=#{sort}, status=#{status}, is_new=#{isNew}, is_hot=#{isHot}, is_recommend=#{isRecommend}, update_time=#{updateTime}
+        WHERE id = #{id}
+    </update>
+    <update id="deleteById">
+        UPDATE product SET deleted = 1 WHERE id = #{id}
+    </update>
+    <update id="deleteBatch">
+        UPDATE product SET deleted = 1 WHERE id IN
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach>
+    </update>
+    <update id="updateStatus">
+        UPDATE product SET status = #{status} WHERE id = #{id}
+    </update>
+    <update id="updateStock">
+        UPDATE product SET stock = #{stock} WHERE id = #{id}
+    </update>
+    <update id="addSalesCount">
+        UPDATE product SET sales = sales + #{count} WHERE id = #{id}
+    </update>
+    <select id="selectTopSales" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM product WHERE deleted = 0 AND status = 1
+        ORDER BY sales DESC LIMIT #{limit}
+    </select>
+    <select id="selectTotalCount" resultType="long">
+        SELECT COUNT(*) FROM product WHERE deleted = 0
+    </select>
+</mapper>

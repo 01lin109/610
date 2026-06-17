@@ -1,0 +1,12 @@
+import request from './request'
+export const getProductList = params => request.get('/product/list', { params })
+export const getProduct = id => request.get(`/product/${id}`)
+export const addProduct = data => request.post('/product', data)
+export const updateProduct = data => request.put('/product', data)
+export const deleteProduct = id => request.delete(`/product/${id}`)
+export const updateProductStatus = (id, status) => request.put(`/product/${id}/status/${status}`)
+export const getCategoryList = params => request.get('/product/categories', { params })
+export const getCategory = id => request.get(`/product/categories/${id}`)
+export const addCategory = data => request.post('/product/categories', data)
+export const updateCategory = data => request.put('/product/categories', data)
+export const deleteCategory = id => request.delete(`/product/categories/${id}`)

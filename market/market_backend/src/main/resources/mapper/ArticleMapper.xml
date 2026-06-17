@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.market.mapper.ArticleMapper">
+    <resultMap id="BaseResultMap" type="com.market.entity.Article">
+        <id column="id" property="id"/><result column="title" property="title"/><result column="category_id" property="categoryId"/><result column="category_name" property="categoryName"/><result column="summary" property="summary"/><result column="content" property="content"/><result column="cover_image" property="coverImage"/><result column="author" property="author"/><result column="is_top" property="isTop"/><result column="status" property="status"/><result column="view_count" property="viewCount"/><result column="publish_time" property="publishTime"/><result column="create_time" property="createTime"/><result column="update_time" property="updateTime"/><result column="deleted" property="deleted"/>
+    </resultMap>
+    <sql id="Base_Column_List">id, title, category_id, category_name, summary, content, cover_image, author, is_top, status, view_count, publish_time, create_time, update_time, deleted</sql>
+    <select id="selectById" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM article WHERE id = #{id} AND deleted = 0</select>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM article WHERE deleted = 0
+        <if test="keyword != null and keyword != ''">AND title LIKE CONCAT('%',#{keyword},'%')</if>
+        <if test="categoryId != null">AND category_id = #{categoryId}</if>
+        <if test="status != null">AND status = #{status}</if>
+        ORDER BY is_top DESC, create_time DESC
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM article WHERE deleted = 0 ORDER BY create_time DESC</select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO article (title, category_id, category_name, summary, content, cover_image, author, is_top, status, view_count, publish_time, create_time, update_time, deleted)
+        VALUES (#{title}, #{categoryId}, #{categoryName}, #{summary}, #{content}, #{coverImage}, #{author}, #{isTop}, #{status}, #{viewCount}, #{publishTime}, #{createTime}, #{updateTime}, #{deleted})
+    </insert>
+    <update id="update">UPDATE article SET title=#{title}, category_id=#{categoryId}, category_name=#{categoryName}, summary=#{summary}, content=#{content}, cover_image=#{coverImage}, author=#{author}, is_top=#{isTop}, status=#{status}, publish_time=#{publishTime}, update_time=#{updateTime} WHERE id=#{id}</update>
+    <update id="deleteById">UPDATE article SET deleted = 1 WHERE id = #{id}</update>
+    <update id="deleteBatch">UPDATE article SET deleted = 1 WHERE id IN <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach></update>
+    <update id="updateStatus">UPDATE article SET status = #{status} WHERE id = #{id}</update>
+    <update id="addViewCount">UPDATE article SET view_count = view_count + 1 WHERE id = #{id}</update>
+    <update id="updateTop">UPDATE article SET is_top = #{isTop} WHERE id = #{id}</update>
+</mapper>

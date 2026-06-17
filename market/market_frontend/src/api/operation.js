@@ -1,0 +1,11 @@
+import request from './request'
+export const getBannerList = params => request.get('/operation/banners', { params })
+export const getBanner = id => request.get(`/operation/banners/${id}`)
+export const addBanner = data => request.post('/operation/banners', data)
+export const updateBanner = data => request.put('/operation/banners', data)
+export const deleteBanner = id => request.delete(`/operation/banners/${id}`)
+export const getAdList = params => request.get('/operation/ads', { params })
+export const getAd = id => request.get(`/operation/ads/${id}`)
+export const addAd = data => request.post('/operation/ads', data)
+export const updateAd = data => request.put('/operation/ads', data)
+export const deleteAd = id => request.delete(`/operation/ads/${id}`)

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.market.mapper.SysMenuMapper">
+    <resultMap id="BaseResultMap" type="com.market.entity.SysMenu">
+        <id column="id" property="id"/><result column="menu_name" property="menuName"/><result column="parent_id" property="parentId"/><result column="order_num" property="orderNum"/><result column="path" property="path"/><result column="component" property="component"/><result column="query" property="query"/><result column="menu_type" property="menuType"/><result column="visible" property="visible"/><result column="perms" property="perms"/><result column="icon" property="icon"/><result column="status" property="status"/><result column="create_time" property="createTime"/><result column="update_time" property="updateTime"/><result column="deleted" property="deleted"/>
+    </resultMap>
+    <sql id="Base_Column_List">id, menu_name, parent_id, order_num, path, component, query, menu_type, visible, perms, icon, status, create_time, update_time, deleted</sql>
+    <select id="selectById" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM sys_menu WHERE id = #{id} AND deleted = 0</select>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM sys_menu WHERE deleted = 0
+        <if test="keyword != null and keyword != ''">AND menu_name LIKE CONCAT('%',#{keyword},'%')</if>
+        <if test="status != null">AND status = #{status}</if> ORDER BY order_num ASC
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM sys_menu WHERE deleted = 0 ORDER BY order_num ASC</select>
+    <select id="selectByParentId" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM sys_menu WHERE parent_id = #{parentId} AND deleted = 0 ORDER BY order_num ASC</select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_menu (menu_name, parent_id, order_num, path, component, query, menu_type, visible, perms, icon, status, create_time, update_time, deleted)
+        VALUES (#{menuName}, #{parentId}, #{orderNum}, #{path}, #{component}, #{query}, #{menuType}, #{visible}, #{perms}, #{icon}, #{status}, #{createTime}, #{updateTime}, #{deleted})
+    </insert>
+    <update id="update">UPDATE sys_menu SET menu_name=#{menuName}, parent_id=#{parentId}, order_num=#{orderNum}, path=#{path}, component=#{component}, query=#{query}, menu_type=#{menuType}, visible=#{visible}, perms=#{perms}, icon=#{icon}, status=#{status}, update_time=#{updateTime} WHERE id=#{id}</update>
+    <update id="deleteById">UPDATE sys_menu SET deleted = 1 WHERE id = #{id}</update>
+    <update id="deleteBatch">UPDATE sys_menu SET deleted = 1 WHERE id IN <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach></update>
+    <select id="selectMenusByUserId" resultMap="BaseResultMap">
+        SELECT DISTINCT m.id, m.menu_name, m.parent_id, m.order_num, m.path, m.component, m.query, m.menu_type, m.visible, m.perms, m.icon, m.status, m.create_time, m.update_time, m.deleted
+        FROM sys_menu m LEFT JOIN sys_role_menu rm ON m.id = rm.menu_id LEFT JOIN sys_user_role ur ON rm.role_id = ur.role_id
+        WHERE ur.user_id = #{userId} AND m.deleted = 0 AND m.status = 1 ORDER BY m.order_num ASC
+    </select>
+    <select id="selectMenusByRoleId" resultMap="BaseResultMap">
+        SELECT m.id, m.menu_name, m.parent_id, m.order_num, m.path, m.component, m.query, m.menu_type, m.visible, m.perms, m.icon, m.status, m.create_time, m.update_time, m.deleted
+        FROM sys_menu m INNER JOIN sys_role_menu rm ON m.id = rm.menu_id WHERE rm.role_id = #{roleId} AND m.deleted = 0 ORDER BY m.order_num ASC
+    </select>
+    <select id="selectPermsByUserId" resultType="string">
+        SELECT DISTINCT m.perms FROM sys_menu m LEFT JOIN sys_role_menu rm ON m.id = rm.menu_id LEFT JOIN sys_user_role ur ON rm.role_id = ur.role_id
+        WHERE ur.user_id = #{userId} AND m.perms IS NOT NULL AND m.perms != ''
+    </select>
+</mapper>

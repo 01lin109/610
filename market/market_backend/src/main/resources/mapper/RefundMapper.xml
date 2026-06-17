@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.market.mapper.RefundMapper">
+    <resultMap id="BaseResultMap" type="com.market.entity.Refund">
+        <id column="id" property="id"/><result column="refund_no" property="refundNo"/><result column="order_id" property="orderId"/><result column="order_no" property="orderNo"/><result column="member_id" property="memberId"/><result column="member_name" property="memberName"/><result column="refund_amount" property="refundAmount"/><result column="reason" property="reason"/><result column="evidence" property="evidence"/><result column="status" property="status"/><result column="handle_note" property="handleNote"/><result column="handler_id" property="handlerId"/><result column="handle_time" property="handleTime"/><result column="apply_time" property="applyTime"/><result column="finish_time" property="finishTime"/><result column="create_time" property="createTime"/><result column="update_time" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">id, refund_no, order_id, order_no, member_id, member_name, refund_amount, reason, evidence, status, handle_note, handler_id, handle_time, apply_time, finish_time, create_time, update_time</sql>
+    <select id="selectById" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM refund WHERE id = #{id}</select>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM refund WHERE 1=1
+        <if test="refundNo != null and refundNo != ''">AND refund_no LIKE CONCAT('%',#{refundNo},'%')</if>
+        <if test="status != null">AND status = #{status}</if>
+        <if test="startTime != null and startTime != ''">AND create_time &gt;= #{startTime}</if>
+        <if test="endTime != null and endTime != ''">AND create_time &lt;= #{endTime}</if>
+        ORDER BY create_time DESC
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">SELECT <include refid="Base_Column_List"/> FROM refund ORDER BY create_time DESC</select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO refund (refund_no, order_id, order_no, member_id, member_name, refund_amount, reason, evidence, status, handle_note, handler_id, handle_time, apply_time, finish_time, create_time, update_time)
+        VALUES (#{refundNo}, #{orderId}, #{orderNo}, #{memberId}, #{memberName}, #{refundAmount}, #{reason}, #{evidence}, #{status}, #{handleNote}, #{handlerId}, #{handleTime}, #{applyTime}, #{finishTime}, #{createTime}, #{updateTime})
+    </insert>
+    <update id="update">UPDATE refund SET refund_no=#{refundNo}, refund_amount=#{refundAmount}, reason=#{reason}, evidence=#{evidence}, status=#{status}, handle_note=#{handleNote}, handler_id=#{handlerId}, handle_time=#{handleTime}, finish_time=#{finishTime}, update_time=#{updateTime} WHERE id=#{id}</update>
+    <delete id="deleteById">DELETE FROM refund WHERE id = #{id}</delete>
+    <update id="updateStatus">UPDATE refund SET status = #{status} WHERE id = #{id}</update>
+    <update id="handleRefund">UPDATE refund SET status=#{status}, handle_note=#{handleNote}, handler_id=#{handlerId}, handle_time=NOW() WHERE id=#{id}</update>
+    <select id="countByStatus" resultType="int">SELECT COUNT(*) FROM refund WHERE status = #{status}</select>
+</mapper>
